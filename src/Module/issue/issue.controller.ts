@@ -24,8 +24,45 @@ const createIssue = async(req : Request,res:Response)=>{
     }
 }
 
+const getAllIssue = async(req : Request,res:Response)=>{
+    try {
+       const {sort,type,status} = req.query ;
+
+       const result = await issueService.getAllIssueFromDB(sort as string)
+
+       let userResponse = await issueService.getUserResponse(result)
+
+       if(type && (type === 'bug' || type === "feature_request") ){
+           userResponse = userResponse.filter((issue)=>{
+            return issue.type === type
+          })
+       }
+
+       if(status && (status === 'open' || status === 'in_progress' || status === 'resolved') ){
+          userResponse = userResponse.filter((issue)=>{
+             return issue.status === status
+          })
+       }
+
+       sendResponse(res,{
+         statusCode:200,
+           success : true,
+           message : 'Issues retrived successfully',
+           data : userResponse
+      })
+       
+        
+    } catch (error : any) {
+       sendResponse(res,{
+         statusCode:500,
+           success : true,
+           message : error.message,
+           error : error
+        })
+    }
+}
  
 export const issueController ={
    createIssue,
-    
+   getAllIssue
 }
