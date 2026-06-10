@@ -84,10 +84,32 @@ const getIssueBySingleUser = async(req : Request,res:Response)=>{
        })
      }
 }
+const deleteIssue = async(req: Request , res:Response)=>{
+     try {
+         const {id} =req.params;
+         await issueService.deleteIssueFromBD(id as string)
+
+         sendResponse(res,{
+            statusCode:200,
+            "success": true,
+            "message": "Issue deleted successfully"
+         })
+          
+     } catch (error : any) {
+
+       sendResponse(res,{
+           statusCode:200,
+          success : false,
+          message : error.message,
+          error :error
+        })
+     }
+}
  
 export const issueController ={
    createIssue,
    getAllIssue,
    getIssueBySingleUser,
+   deleteIssue,
    
 }

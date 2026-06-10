@@ -76,10 +76,27 @@ const getSingleIssueFromDB = async(id : string)=>{
    return result
 
 }
+const deleteIssueFromBD = async(id:string)=>{
+   try {
+       const result = await pool.query(`
+              select * from  issues where id = $1
+         `,[id])
+      if(result.rows.length === 0){
+          throw new Error('User not found in DB to delete!!')
+      }
+      await pool.query(`
+          delete from issues where id=$1
+      `,[id])
+   } catch (error) {
+      throw error;
+   }
+    
+}
 export const issueService = {
    createIssueIntoDB,
    getAllIssueFromDB,
    getUserResponse,
-   getSingleIssueFromDB
+   getSingleIssueFromDB,
+   deleteIssueFromBD
 
 }
