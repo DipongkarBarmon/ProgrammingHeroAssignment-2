@@ -1,4 +1,5 @@
 import express, { type Application, type Request, type Response } from "express";
+import { authRouter } from "./Module/auth/auth.route.js";
 
 const app :Application = express()
 
@@ -15,5 +16,7 @@ app.get('/',(req : Request, res : Response)=>{
        author : "Dipongkar Barmon"
     })
 })
+
+app.use('/api/auth',authRouter)
 
 export default app;
