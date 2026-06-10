@@ -76,6 +76,46 @@ const getSingleIssueFromDB = async(id : string)=>{
    return result
 
 }
+
+const updateIssueIntoDB = async(payload : IIssue,id : string,issueid:string)=>{
+     try {
+         const {title,description,type} = payload;
+         const userData = await pool.query(`
+               select * from users where id=$1
+            `,[id])
+
+         if(userData.rows.length===0){
+             throw new Error('User not found!!')
+         }
+         const user = userData.rows[0]
+           const issueData = await pool.query(`
+               select * from issues where id=$1
+            `,[issueid])
+
+         if(issueData.rows.length===0){
+             throw new Error('Issue not found!!')
+         }
+         //  console.log(issueData)
+         const issue = issueData.rows[0];
+         //  console.log(user.role,issue.status)
+         if(user.role=='contributor' && issue.status != 'open' ){
+             throw new Error('Contributor not update issue!!')
+         }
+         // console.log("type")
+        const result = await pool.query(`
+             update issues set 
+             title = coalesce($1,title),
+             description =coalesce($2,description),
+             type = coalesce($3,type)
+             where id = $4 returning *
+         `,[title,description,type,issueid])
+         // console.log("Type")
+        return result;
+     } catch (error) {
+         throw error;
+     }
+}
+
 const deleteIssueFromBD = async(id:string)=>{
    try {
        const result = await pool.query(`
@@ -97,6 +137,7 @@ export const issueService = {
    getAllIssueFromDB,
    getUserResponse,
    getSingleIssueFromDB,
+   updateIssueIntoDB,
    deleteIssueFromBD
 
 }

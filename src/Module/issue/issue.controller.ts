@@ -84,6 +84,37 @@ const getIssueBySingleUser = async(req : Request,res:Response)=>{
        })
      }
 }
+
+const updateIssue = async(req: Request,res:Response)=>{
+    try {
+        const {id}=req.params;
+       const result = await issueService.updateIssueIntoDB(req.body,req.user.id,id as string)
+
+       if(result.rows.length === 0){
+         sendResponse(res,{
+            statusCode:404,
+             success : false,
+             message : "Update issue not found!!"
+          })
+       }
+      
+       sendResponse(res,{
+         statusCode:200,
+          success :true,
+          message : "Issue updated successfully",
+          data: result.rows[0]
+      })
+      
+    } catch (error : any) {
+      sendResponse(res,{
+         statusCode:500,
+          success : false,
+          message : error.message,
+          error:error
+      })
+       
+    }
+}
 const deleteIssue = async(req: Request , res:Response)=>{
      try {
          const {id} =req.params;
@@ -110,6 +141,7 @@ export const issueController ={
    createIssue,
    getAllIssue,
    getIssueBySingleUser,
+   updateIssue,
    deleteIssue,
    
 }
