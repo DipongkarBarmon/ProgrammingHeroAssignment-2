@@ -108,7 +108,7 @@ const updateIssueIntoDB = async(payload : IIssue,id : string,issueid:string)=>{
              description =coalesce($2,description),
              type = coalesce($3,type)
              where id = $4 returning *
-         `,[title,description,type,issueid])
+         `,[title,description,type,issueid])  
          // console.log("Type")
         return result;
      } catch (error) {

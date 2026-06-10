@@ -2,6 +2,7 @@ import express, { type Application, type Request, type Response } from "express"
 import { authRouter } from "./Module/auth/auth.route.js";
 import cors from 'cors'
 import globalErrorHandler from "./Middleware/globalErrorHandler.js";
+import { issueRouter } from "./Module/issue/issue.route.js";
 const app :Application = express()
 
 // app.use(cookiePerser())
@@ -22,6 +23,7 @@ app.get('/',(req : Request, res : Response)=>{
 })
 
 app.use('/api/auth',authRouter)
+app.use('/api/issues',issueRouter)
 
 
 app.use(globalErrorHandler)

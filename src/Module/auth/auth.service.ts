@@ -12,7 +12,7 @@ import jwt from 'jsonwebtoken'
 
           const hassPassword = await bcrypt.hash(password,10);
           
-          console.log(name,email,role)
+         //  console.log(name,email,role)
 
           const result = await  pool.query(`
                 insert into users(name,email,password,role) values($1,$2,$3,coalesce($4,'contributor')) returning *
