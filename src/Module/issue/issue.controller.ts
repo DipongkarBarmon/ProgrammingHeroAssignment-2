@@ -61,8 +61,33 @@ const getAllIssue = async(req : Request,res:Response)=>{
         })
     }
 }
+const getIssueBySingleUser = async(req : Request,res:Response)=>{
+     const {id} = req.params
+     try {
+      const result = await issueService.getSingleIssueFromDB(id as string)
+
+      const userResponse = await issueService.getUserResponse(result.rows)
+
+      sendResponse(res,{
+         statusCode:200,
+          success : true,
+          message : "Issue retrived successfully",
+          data : userResponse
+       })
+
+     } catch (error : any) {
+      sendResponse(res,{
+         statusCode:500,
+         success : false,
+         message : error.message, 
+         error:error 
+       })
+     }
+}
  
 export const issueController ={
    createIssue,
-   getAllIssue
+   getAllIssue,
+   getIssueBySingleUser,
+   
 }

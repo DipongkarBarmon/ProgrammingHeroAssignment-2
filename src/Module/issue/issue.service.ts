@@ -65,10 +65,21 @@ const getUserResponse = async(issues:IResponseIssue[])=>{
       throw error;
     }
 }
+const getSingleIssueFromDB = async(id : string)=>{
+    
+   const result = await pool.query(`
+          select * from issues where id =$1
+      `,[id])
+   if(result.rows.length === 0){
+      throw new Error("Issue not found for id!!")
+   }
+   return result
+
+}
 export const issueService = {
    createIssueIntoDB,
    getAllIssueFromDB,
    getUserResponse,
-   
+   getSingleIssueFromDB
 
 }
