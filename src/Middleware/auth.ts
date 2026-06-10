@@ -6,7 +6,6 @@ import { pool } from "../db/index.js"
 import type { Role } from "../type/index.js"
  
 
-
 export const auth = (...roles: Role[])=>{
    return async(req: Request,res:Response,next :NextFunction)=>{
        try {
